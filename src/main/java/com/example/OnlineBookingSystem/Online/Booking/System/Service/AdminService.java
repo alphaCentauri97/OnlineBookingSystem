@@ -4,10 +4,9 @@ import com.example.OnlineBookingSystem.Online.Booking.System.Exception.UserAlrea
 import com.example.OnlineBookingSystem.Online.Booking.System.Exception.UserNotFoundException;
 import com.example.OnlineBookingSystem.Online.Booking.System.Model.ServiceProvider;
 import com.example.OnlineBookingSystem.Online.Booking.System.Model.Users;
-import com.example.OnlineBookingSystem.Online.Booking.System.Repository.AdminRepository;
+import com.example.OnlineBookingSystem.Online.Booking.System.Repository.UserRepository;
 import com.example.OnlineBookingSystem.Online.Booking.System.Repository.ServiceProviderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +16,7 @@ import java.util.Optional;
 public class AdminService {
 
     @Autowired
-    private AdminRepository adminRepository;
+    private UserRepository adminRepository;
 
     @Autowired
     private ServiceProviderRepository providerRepository;
