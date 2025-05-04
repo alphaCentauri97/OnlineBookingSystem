@@ -8,6 +8,10 @@ import com.example.OnlineBookingSystem.Online.Booking.System.Repository.UserRepo
 import com.example.OnlineBookingSystem.Online.Booking.System.Repository.AvailabilityRepository;
 import com.example.OnlineBookingSystem.Online.Booking.System.Repository.ServiceProviderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +27,16 @@ public class ServiceProviderService {
     private ServiceProviderRepository providerRepository;
 
     @Autowired
+    private AuthenticationManager manager;
+
+    @Autowired
     private AvailabilityRepository availabilityRepository;
+
+    @Autowired
+    private MyUserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtService jwtService;
 
 
     public Availability createAvailability(String email, Availability availability) {
@@ -39,5 +52,17 @@ public class ServiceProviderService {
 
     public List<Availability> getAllAvailability() {
         return availabilityRepository.findAll();
+    }
+
+    public String verify(Users user) {
+        Authentication authentication = manager.authenticate(
+                new UsernamePasswordAuthenticationToken(user.getEmail(),user.getPassword()));
+        if(authentication.isAuthenticated()){
+            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
+
+            String token = jwtService.generateToken(userDetails);
+            return token;
+        }
+        return "fail";
     }
 }

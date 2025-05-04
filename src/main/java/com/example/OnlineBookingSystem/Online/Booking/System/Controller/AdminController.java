@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin")
 public class AdminController {
 
     @Autowired
@@ -29,24 +28,30 @@ public class AdminController {
     public List<ServiceProvider> getAllProviders(){
         return adminService.getAllProviders();
     }
+    @PostMapping("/login")
+    public String login(@RequestBody Users user)
+    {
+        System.out.println(user);
+        return adminService.verify(user);
+    }
 
-    @PostMapping
+    @PostMapping("/admin")
     public ResponseEntity<Users> createUser(@RequestBody Users users) {
 
         return new ResponseEntity<>(adminService.createUser(users), HttpStatus.CREATED);
     }
 
-    @GetMapping
+    @GetMapping("/admin")
     public List<Users> getData() {
         return adminService.getData();
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/admin/{id}")
     public ResponseEntity<Users> updateUser(@PathVariable Long id, @RequestBody Users updatedUser) {
         return ResponseEntity.ok(adminService.updateUser(id, updatedUser));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id){
         adminService.deleteUser(id);
         return ResponseEntity.ok("User deleted successfully");

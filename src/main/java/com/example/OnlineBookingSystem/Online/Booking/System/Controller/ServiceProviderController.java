@@ -27,4 +27,11 @@ public class ServiceProviderController {
     public List<Availability> getAllAvailability(){
         return providerService.getAllAvailability();
     }
+
+    @PostMapping("/login")
+    public String login(@RequestBody Users user)
+    {
+        System.out.println(user);
+        return providerService.verify(user);
+    }
 }

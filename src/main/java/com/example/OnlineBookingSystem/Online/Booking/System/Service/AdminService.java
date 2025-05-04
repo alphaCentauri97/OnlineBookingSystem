@@ -7,6 +7,10 @@ import com.example.OnlineBookingSystem.Online.Booking.System.Model.Users;
 import com.example.OnlineBookingSystem.Online.Booking.System.Repository.UserRepository;
 import com.example.OnlineBookingSystem.Online.Booking.System.Repository.ServiceProviderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +21,15 @@ public class AdminService {
 
     @Autowired
     private UserRepository adminRepository;
+
+    @Autowired
+    private MyUserDetailsService userDetailsService;
+
+    @Autowired
+    private AuthenticationManager manager;
+
+    @Autowired
+    private JwtService jwtService;
 
     @Autowired
     private ServiceProviderRepository providerRepository;
@@ -73,5 +86,17 @@ public class AdminService {
     public List<ServiceProvider> getAllProviders() {
 
         return providerRepository.findAll();
+    }
+
+    public String verify(Users user) {
+        Authentication authentication = manager.authenticate(
+                new UsernamePasswordAuthenticationToken(user.getEmail(),user.getPassword()));
+        if(authentication.isAuthenticated()){
+            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
+
+            String token = jwtService.generateToken(userDetails);
+            return token;
+        }
+        return "fail";
     }
 }

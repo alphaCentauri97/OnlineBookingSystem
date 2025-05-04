@@ -2,6 +2,7 @@ package com.example.OnlineBookingSystem.Online.Booking.System.Controller;
 
 import com.example.OnlineBookingSystem.Online.Booking.System.Model.Appointment;
 import com.example.OnlineBookingSystem.Online.Booking.System.Model.AppointmentStatus;
+import com.example.OnlineBookingSystem.Online.Booking.System.Model.Users;
 import com.example.OnlineBookingSystem.Online.Booking.System.Service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,13 @@ public class CustomerController {
 
     }
 
-    @GetMapping("/appoitnment")
+    @PostMapping("/login")
+    public String login(@RequestBody Users user)
+    {
+        System.out.println(user);
+        return customerService.verify(user);
+    }
+    @GetMapping("/appointment")
     public List<Appointment> getAppointments(){
         return customerService.getAllApointments();
     }
